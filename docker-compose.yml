@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  books-service:
+    build: ./books-service
+    container_name: books-service
+    ports:
+      - "3001:3001"
+  authors-service:
+    build: ./authors-service
+    container_name: authors-service
+    ports:
+      - "3002:3002"
+  reviews-service:
+    build: ./reviews-service
+    container_name: reviews-service
+    ports:
+      - "3003:3003"
