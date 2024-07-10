@@ -51,19 +51,6 @@ jobs:
       run: |
         echo "${{ secrets.AWS_EC2_KEY }}" > key.pem
         chmod 600 key.pem
-    - name: Stop and remove running containers and free ports
-      run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@${{ secrets.AWS_EC2_HOST }} <<-EOF
-          sudo docker stop service-list-task || true
-          sudo docker rm service-list-task || true
-          sudo docker stop service-update-task || true
-          sudo docker rm service-update-task || true
-          sudo docker stop service-delete-task || true
-          sudo docker rm service-delete-task || true
-          sudo fuser -k 8080/tcp || true
-          sudo fuser -k 8081/tcp || true
-          sudo fuser -k 8082/tcp || true
-        EOF
     
     - name: Pull Docker images
       run: |
