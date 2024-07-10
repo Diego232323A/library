@@ -35,15 +35,12 @@ jobs:
             exit 1
           fi
         done
-
     - name: Clean up Previous Containers
       run: |
         docker-compose down
-
     - name: Execute Docker Compose
       run: |
         docker-compose up -d
-
   deploy-AWS:
     needs: [build-and-push]  
     runs-on: ubuntu-latest
@@ -54,7 +51,20 @@ jobs:
       run: |
         echo "${{ secrets.AWS_EC2_KEY }}" > key.pem
         chmod 600 key.pem
-
+    - name: Stop and remove running containers and free ports
+      run: |
+        ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@${{ secrets.AWS_EC2_HOST }} <<-EOF
+          sudo docker stop service-list-task || true
+          sudo docker rm service-list-task || true
+          sudo docker stop service-update-task || true
+          sudo docker rm service-update-task || true
+          sudo docker stop service-delete-task || true
+          sudo docker rm service-delete-task || true
+          sudo fuser -k 8080/tcp || true
+          sudo fuser -k 8081/tcp || true
+          sudo fuser -k 8082/tcp || true
+        EOF
+    
     - name: Pull Docker images
       run: |
         ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@${{ secrets.AWS_EC2_HOST }} <<-EOF
@@ -62,11 +72,10 @@ jobs:
           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/authors-service:1
           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/reviews-service:1
         EOF
-
     - name: Run new containers
       run: |
         ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@${{ secrets.AWS_EC2_HOST }} <<-EOF
-          sudo docker run -d --name service-list-task -p 8083:3001 ${{ secrets.DOCKERHUB_USERNAME }}/books-service:1
+          sudo docker run -d --name service-list-task -p 8085:3001 ${{ secrets.DOCKERHUB_USERNAME }}/books-service:1
           sudo docker run -d --name service-update-task -p 8084:3002 ${{ secrets.DOCKERHUB_USERNAME }}/authors-service:1
-          sudo docker run -d --name service-delete-task -p 8085:3003 ${{ secrets.DOCKERHUB_USERNAME }}/reviews-service:1
+          sudo docker run -d --name service-delete-task -p 8083:3003 ${{ secrets.DOCKERHUB_USERNAME }}/reviews-service:1
         EOF
