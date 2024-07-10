@@ -1,47 +1,47 @@
 # Library Microservices
 
-Este proyecto implementa una arquitectura de microservicios para gestionar una biblioteca. Incluye tres microservicios: `books-service`, `authors-service` y `reviews-service`. Cada microservicio tiene un endpoint que devuelve datos simulados.
+This project implements a microservices architecture to manage a library. It includes three microservices: `books-service`, `authors-service` and `reviews-service`. Each microservice has an endpoint that returns simulated data.
 
-## Estructura del Proyecto
+## Project Structure
 
-- **books-service**: Servicio para gestionar libros.
-- **authors-service**: Servicio para gestionar autores.
-- **reviews-service**: Servicio para gestionar reseñas.
+- **books-service**: Service to manage books.
+- **authors-service**: Service to manage authors.
+- **reviews-service**: Service to manage reviews.
 
-## Prerrequisitos
+## Prerequisites
 
-Asegúrate de tener instalado lo siguiente:
+Make sure you have the following installed:
 
 - [Node.js](https://nodejs.org/)
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 
-## Instalación y Ejecución Local
+## Local Installation and Execution
 
-### Paso 1: Clonar el Repositorio
+### Step 1: Clone the Repository
 
 ```sh
 git clone https://github.com/Diego232323a/library.git
 cd library-microservices
 
-### Paso 2: Navegar a Cada Microservicio, Instalar Dependencias y Ejecutar
+### Step 2: Navigate to Each Microservice, Install Dependencies and Run
 
-Books Service
-    cd books-service
-    npm install
-    npm start
+Book Service
+ cd books-service
+ npm install
+ npm start
 
 Authors Service
-    cd authors-service
-    npm install
-    npm start
+ cd authors-service
+ npm install
+ npm start
 
 Reviews Service
-    cd reviews-service
-    npm install
-    npm start
+ cd reviews-service
+ npm install
+ npm start
 
-### Paso 3: Acceder a los Endpoints
+### Step 3: Access Endpoints
 
 Books Service: http://localhost:3001/books
 Authors Service: http://localhost:3002/authors
